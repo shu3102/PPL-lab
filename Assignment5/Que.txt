@@ -1,0 +1,3 @@
+Write a program to develop a software to introduce animals to kids. Implement classes for
+animals like Dog, Cat, Elephant, Fish etc. With constructor destructor interfaces and
+variables with public or private access specifies.
