@@ -1,0 +1,65 @@
+
+A-1 //
+
+int Z;                                  |main ()
+                                        |{
+void main()                             |  int a;
+{                                       |  int b;
+        int a, b, c;                    |  int c;
+        int p = 6;                      |  int p;
+        int q;                          |  int q;
+        double r;                       |  double r;
+                                        |
+        a = 10;                         |  p = 6;
+        b = 20;                         |  a = 10;
+        c = a * b + 25;                 |  b = 20;
+        p = 6;                          |  _1 = a * b;
+        q = Z;                          |  c = _1 + 25;
+        r = 34.5;                       |  p = 6;
+        Z = r;                          |  q = Z;
+        Z = Z + 1;                      |  r = 3.45e+1;
+}                                       |  _2 = (int) r;
+                                        |  Z = _2;
+~                                       |  Z.0_3 = Z;
+~                                       |  _4 = Z.0_3 + 1;
+~                                       |  Z = _4;
+A-1.c                                    A-1.c.004t.gimple                      
+
+
+Questions
+---------
+
+       1.  How  do the  declarations  look in  the  GIMPLE? Specifically,  what
+            happens to multiple  variables declared and initialized  on the same
+            line? What happens to global declaration [int Z]?
+
+ ANS:	
+	   The declarations in GIMPLE are one per line unlike in the simple code. Multiple 
+	   variables declared and initialized on the same line in the sample code is declared 
+           on separate lines in GIMPLE. The globle declaration of [int Z] is disappeared and 
+	   its value is preserved to be used and for using its value it must be first loaded from locals.
+
+
+       2.  How are complex  expressions such as [c  = a * b +  25] broken down?
+            Can you  determine a  rule as  to when  temporary variables  will be
+            introduced?
+ANS:
+	  Temperory variables are used to breakdown computational complex expressions.
+	  Temporary variables can be used when  there is an operation as an intermediate computation.
+
+
+       3.  How are  floats/doubles represented in  GIMPLE? What happens when a
+            float/double is assigned to an integer in [Z = r]?
+ANS:
+	   Floats and doubles are represented using scientific notation in GIMPLE.
+	   An explicit cast is inserted when a float/double is assigned to an interger.
+
+      4.   How  are reads/writes  to the  global variable  Z performed?  Why is
+            there a temporary introduced  for the statement [Z = Z  + 1] but not
+            for the statements [q = Z] or [Z = p]?	
+ANS:
+	   Reads/writes are performed through the stores from the locals. A temporary is used 
+	   for the statement Z=Z+1 because the value of Z+1 
+	   can not be stored at the memory location of Z directly, which is not the 
+	   case in [q=Z] or [Z=p].	
+

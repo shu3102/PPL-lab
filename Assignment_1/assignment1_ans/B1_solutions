@@ -1,0 +1,28 @@
+
+
+
+
+main ()                                 |main ()                                
+{                                       |{                                      
+  int x;                                |  int D.1598;                          
+  int D.1591;                           |  int a;                               
+                                        |  int x;                               
+<bb 2>:                                 |  int D.1591;                          
+  x_1 = 3;                              |                                       
+  x_2 = AddTwo (x_1);                   |<bb 2>:                                
+  D.1591_3 = x_2;                       |  x_1 = 3;                             
+  return D.1591_3;                      |  a_4 = x_1 + 2;                       
+                                        |  D.1598_5 = a_4;                      
+}                                       |  x_2 = D.1598_5;                      
+                                        |  D.1591_3 = x_2;                      
+                                        |  return D.1591_3;                     
+                                        |                                       
+                                        |}               
+
+Solutions
+---------
+
+        1  It can't be discarded, because it may be called from another translation unit.
+
+        2  Add the static keyword to the prototype to signify that its linkage is
+           internal only.

@@ -1,0 +1,52 @@
+                           |   
+  2 int main ()                                   |main ()
+  3 {                                             |{  
+  4    int a, b;                                  |  int b;
+  5    for (a=4 ; a<100; a++) {                   |  int a;
+  6        if (a < 4)                             |   
+  7            b = b + 2;                         |<bb 2>: 
+  8        else                                   |  goto <bb 7>; 
+  9            b = b * 2;                         |   
+ 10    }                                          |<bb 3>: 
+ 11    printf ("%d%d", a, b);                     |Invalid sum of incoming frequencies 9897, should be 4948
+ 12 }                                             |  # a_6 = PHI <a_16(7), a_1(5)>
+ 13                                               |  # b_13 = PHI <b_14(7), b_3(5)>
+ 14                                               |  b_7 = b_13 * 2;
+ 15                                               |
+ 16                                               |<bb 4>: 
+ 17                                               |Invalid sum of incoming frequencies 4948, should be 9897
+ 18                                               |  # b_2 = PHI <b_7(3)>
+ 19                                               |  a_8 = a_6 + 1;
+ 20                                               |
+ 21                                               |<bb 5>: 
+ 22                                               |  # a_1 = PHI <a_8(4)>
+ 23                                               |  # b_3 = PHI <b_2(4)>
+ 24                                               |  if (a_1 != 100)
+ 25                                               |    goto <bb 3>; 
+ 26                                               |  else
+ 27                                               |    goto <bb 6>; 
+ 28                                               |
+ 29                                               |<bb 6>: 
+ 30                                               |  # b_12 = PHI <b_3(5)>
+ 31                                               |  a_11 = 100;
+ 32                                               |  printf ("%d%d", 100, b_12);
+ 33                                               |  return;
+ 34                                               |
+ 35                                               |<bb 7>: 
+ 36                                               |  # a_16 = PHI <4(2)>
+ 37                                               |  # b_14 = PHI <b_5(D)(2)>
+ 38                                               |  goto <bb 3>; 
+ 39                                               |
+ 40                                               |}
+
+
+
+
+	 1   In the file B-3.c, what values  can variable `a' take? Will the `if'
+             condition [a  < 4] ever  be true?  Inspect the file  B-3.c.*.vrp1 to
+             analyze the dump.
+	ans:
+	      Variable `a' can take the values  4 to 99. Since, the `if' condition
+              will never be  true for the give loop  bounds, [b = b +  2] is never
+              executed. Therefore, the optimized  code has eliminated this program
+              statement.
