@@ -1,0 +1,68 @@
+Solution:
+	
+	1(a): Since RAW dependence exists from  S1 to S2 and from S1 
+	      to S1  due to  array 'A' vectorization is not possible
+	
+	1(b): Simillarly for parallelization loop carried dependence
+	      exists from S1 to S2, S1 to S1 due to array 'A' and S1 
+	      to S2 due to array  'C', therefore parallelization is 
+	      not possible
+
+	1(c): Parallelization   and  Vectorization   dumps   clearly 
+	      supports our claim
+
+	      Parallelization dump:
+	      
+	        D.1859_3 = C[i_27];
+	        D.1860_4 = i_27 + -1;
+	        D.1861_5 = A[D.1860_4];
+  	        D.1862_6 = D.1859_3 + D.1861_5;
+	        A[i_27] = D.1862_6;
+	        D.1861_9 = A[D.1860_4];
+	        D.1863_10 = B[i_27];
+	        D.1864_11 = D.1861_9 + D.1863_10;
+		D.1865_12 = D.1864_11 + 10;
+		C[D.1860_4] = D.1865_12;
+		i_13 = i_27 + 1;
+		ivtmp.4_30 = ivtmp.4_31 - 1;
+	    
+
+ 	    Vectorization dump:
+	      
+		D.2304_3 = C[i_27];
+		D.2305_4 = i_27 + -1;
+		D.2306_5 = A[D.2305_4];
+		D.2307_6 = D.2304_3 + D.2306_5;
+		A[i_27] = D.2307_6;
+		D.2306_9 = A[D.2305_4];
+		D.2308_10 = B[i_27];
+		D.2309_11 = D.2306_9 + D.2308_10;
+		D.2310_12 = D.2309_11 + 10;
+		C[D.2305_4] = D.2310_12;
+		i_13 = i_27 + 1;
+
+
+	 2) Since  dependence  exists from S1 to S1 due to access  of 
+	    array  'A', statement  S1 can  never  be  parallelized or 
+	    vectorized, but if we distribute the loop along S1 and S2,
+	    then  gcc-4.7.2 can  parallelize and  vectorize loop  around S2
+	  
+	    Vectorization dump:
+	
+  	     vect_var_.13_68 = MEM[(int[150] *)vect_pA.9_66];
+  	     vect_var_.18_72 = MEM[(int[150] *)vect_pB.14_70];
+  	     vect_var_.19_73 = vect_var_.13_68 + vect_var_.18_72;
+  	     vect_var_.20_75 = vect_var_.19_73 + vect_cst_.21_74;
+	     MEM[(int[150] *)vect_pC.22_77] = vect_var_.20_75;
+  	     vect_pA.9_67 = vect_pA.9_66 + 16;
+  	     vect_pB.14_71 = vect_pB.14_70 + 16;
+	     vect_pC.22_78 = vect_pC.22_77 + 16
+
+	    Parallelization dump:
+	
+	     D.1921_7 = __builtin_omp_get_num_threads ();
+	     D.1922_8 = (<unnamed-unsigned:32>) D.1921_7;
+	     D.1923_9 = __builtin_omp_get_thread_num ();
+	     D.1924_10 = (<unnamed-unsigned:32>) D.1923_9;
+
+

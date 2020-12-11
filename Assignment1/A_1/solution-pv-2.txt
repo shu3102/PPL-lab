@@ -1,0 +1,49 @@
+Solution
+__________
+	
+1)	For a machine having 128 bit of vector registers, the vectorization factor (VF) is the ratio of 128 by the
+	size of data type in bits. Here data type for which vector operation is performed will decide the denominator.
+	If the same machine have 'int' of size 32 bit, VF will be 4. So, VF is dependent on the data type.
+
+2)	Considering VF=4 i.e. size of vector register is 128 bits and size of 'int' is 32 bits.
+a)	For all -ve value of 'X', statement S1 has a loop-carried anti dependence over itself which doesn't prohibits
+	the vectorization. Therefore vectorization is always possible for X<0.
+	For X=0, S1 has loop-independent anti dependence over itself. Hence vectorization is possible.
+	For 0<X<4, S1 has loop-carried flow dependence and also the distance between the two iterations which are
+	dependent is lesser than VF. So vectorizing above loop, will not be able to honour the dependence. Hence
+	vectorization is not possible.
+	For X>=4, S1 has loop-carried flow dependence but also the distance between the two dependent iteration is
+	greater than VF. Hence vectorization is still possible in presence flow dependence as the vectorized program
+	will honour the dependences.
+
+b)	As mentioned in solution to above section, for 0<X<4, vectorization will not be done by gcc-4.7.2 because
+	dependences will not be maintained.
+
+c)	In the program, total no. of iterations i.e. 251 is not completely divisible by VF i.e. 4. Hence some
+	iterations, here 3, will get peeled and will not be part of vectorized loop.
+	The above program will therefore execute 62 iterations in vectorized body and remaining 3 in sequential order.
+	The 3 iterations which will be peeled can be any iterations and the actual decision is taken by gcc-4.7.2.
+	Below is the portion from the dump created which illustrates the peeling.
+	
+		<bb 3>:	
+			........
+			# ivtmp.17_38 = PHI <ivtmp.17_39(7), 0(2)>
+			........
+			ivtmp.17_39 = ivtmp.17_38 + 1;
+			if (ivtmp.17_39 < 62)
+			goto <bb 7>;
+			else
+			goto <bb 4>;
+
+
+		<bb 5>:
+			..........
+			# ivtmp.4_17 = PHI <ivtmp.4_22(6), 3(4)>
+			.......... 
+			ivtmp.4_22 = ivtmp.4_17 - 1;
+			if (ivtmp.4_22 != 0)
+			goto <bb 6>;
+			else
+			goto <bb 8>;
+
+

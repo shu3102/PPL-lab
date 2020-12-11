@@ -1,0 +1,87 @@
+Solution
+
+
+1)	
+a)	In the code, there are loop-carried flow and anti dependences from S2 to S1. Distance between
+	the iterations which are dependent is 2 in both the cases which is less than VF (=4).
+	Hence vectorization and parallelization is not possible in the given program.
+	
+b)	As statement S2 is the source while S1 is sink in the given program, interchanging the statements
+	will transform the program as below.
+
+		#include"stdio.h"
+		int main ()
+		{
+			int i,n;
+			int A[150],C[150];
+			for (i=0; i<100; i++)																																																																																																																																																																																																																																																																																							
+			{
+				 C[i+2] = A[i+2] + 10; /* S2 */
+				 A[i] = C[i] + 7;   /* S1 */
+			}
+
+			return (A[n]+C[n]);
+		}
+
+	
+	The transformed code which makes parallelization also possible is shown below.
+
+		#include"stdio.h"
+		int main ()
+		{
+			int i,n;
+			int A[150],C[150];
+			A[0] = C[0] + 7;
+			A[1] = C[1] + 7;
+			for (i=2; i<100; i++)
+			{
+				 C[i] = A[i] + 10; /* S2 */
+				 A[i] = C[i] + 7;   /* S1 */
+			}
+			C[100] = A[100] + 10;
+			C[101] = A[101] + 10;
+
+			return (A[n]+C[n]);
+		}
+
+	In the above transformed code, both vectorization and parallelization is possible.
+
+
+
+2)
+a)	The dependences in the programs are
+	(1)	Loop-independent anti dependence from S1 to S2 because of array 'b'.
+	(2)	Loop-carried anti dependence from S2 to S1 because of array 'b' with distance 1.
+	(3) Loop-carried anti dependence from S2 to itself because of array 'b' with distance 2.
+	Hence there is a dependence cycle because of anti dependences between S1 and S2 and the
+	distance between dependent iterations is less than VF (=4), therefore vectorization and
+	parallelization is not possible.
+	
+b)	
+	The transformed code which enables vectorization/parallelization and equivalent too is shown below.
+	
+		#include"stdio.h"
+		int main()
+		{
+				int a[10000];
+				int b[10000];
+				int c[10000];
+				int i,n;
+				int d[10000],e[10000];		//copy arrays
+				
+		//loop to copy		
+				for(i=0;i<10000;i++)
+				{
+					d[i]=a[i];
+					e[i]=b[i];
+				}
+				
+				for(i=0;i<10000;i++)
+				{
+					a[i]=e[i];		/* S1 */
+					b[i]=d[i+1]+e[i+2];		/* S2 */
+				}
+				return a[n]+b[n];
+		}
+
+	The above code has both parallelization/vectorization possible.

@@ -1,0 +1,64 @@
+-----------------------
+A-4 Arrays and Pointers
+-----------------------
+
+  1 int main()                               |main ()
+  2 {                                        |{
+  3     int a[3];                            |  int * p;
+  4     int b[] = {1, 2, 3};                 |  int i;
+  5     int i, *p;                           |  int b[3];
+  6                                          |  int a[3];
+  7                                          |  int * D.1714;
+  8                                          |  int D.1713;
+  9                                          |
+ 10                                          |<bb 2>:
+ 11                                          |  b[0] = 1;
+ 12                                          |  b[1] = 2;
+ 13                                          |  b[2] = 3;
+ 14     for (i=0; i<3; i++) {                |  i = 0;
+ 15                                          |  goto <bb 4>;
+ 16                                          |
+ 17         a[i] = b[i];                     |<bb 3>:
+ 18                                          |  D.1713 = b[i];
+ 19                                          |  a[i] = D.1713;
+ 20                                          |  i = i + 1;
+ 21                                          |
+ 22                                          |<bb 4>:
+ 23                                          |  if (i <= 2)
+ 24                                          |    goto <bb 3>;
+ 25     }                                    |  else
+ 26                                          |    goto <bb 5>;
+ 27                                          |
+ 28                                          |<bb 5>:
+ 29     p = a;                               |  p = &a;
+ 30                                          |
+ 31     *(p + 2) = 5;                        |  D.1714 = p + 8;
+ 32 }                                        |  *D.1714 = 5;
+ 33                                          |  a = {CLOBBER};
+ 34                                          |  b = {CLOBBER};
+ 35                                          |  return;
+ 36                                          |
+ 37                                          |}
+
+
+Solutions
+---------
+
+        1  - Just like  scalar initialization, it  is split from  the declaration
+            and  included in  the procedure  body.
+           
+           - In  the case  of arrays,  the initialization is split into  multiple statements that assign values
+            to  individual array  elements.
+
+           - This  is to  remain consistent  with GIMPLE's one operation per statement policy.
+
+            
+        2  - As GIMPLE  can perform only  one operation per statement,  it cannot read  and write 
+            to  array  locations at  the  same  time (as  array accesses  involve offset  calculation).
+
+           - Thus,  these are  split into  separate read and write statements by introducing a temporary.
+
+           
+        3   CLOBBER statements are used for  address-escaped variables. It is an
+            annotation  to  signify  that  the  scope  of  this  address-escaped
+            variable has ended.

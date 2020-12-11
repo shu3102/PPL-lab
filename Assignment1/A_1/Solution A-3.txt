@@ -1,0 +1,71 @@
+---------
+A-3 Loops
+---------
+
+  1 int main()                               |main ()
+  2 {                                        |{
+  3     int sum = 0;                         |  int j;
+  4     int i, j;                            |  int i;
+  5                                          |  int sum;
+  6                                          |  int D.1718;
+  7                                          |
+  8     while(sum < 100) {                   |<bb 2>:
+  9         sum = sum * 2;                   |  sum = 0;
+ 10     }                                    |  goto <bb 4>;
+ 11                                          |
+ 12                                          |<bb 3>:
+ 13                                          |  sum = sum * 2;
+ 14                                          |
+ 15                                          |<bb 4>:
+ 16                                          |  if (sum <= 99)
+ 17                                          |    goto <bb 3>;
+ 18                                          |  else
+ 19                                          |    goto <bb 5>;
+ 20                                          |
+ 21     for(i=0; i<25; i++) {                |<bb 5>:
+ 22         for(j=0; j<50; j++) {            |  i = 0;
+ 23             sum = sum + i*j;             |  goto <bb 10>;
+ 24         }                                |
+ 25     }                                    |<bb 6>:
+ 26 }                                        |  j = 0;
+ 27                                          |  goto <bb 8>;
+ 28                                          |
+ 29                                          |<bb 7>:
+ 30                                          |  D.1718 = i * j;
+ 31                                          |  sum = D.1718 + sum;
+ 32                                          |  j = j + 1;
+ 33                                          |
+ 34                                          |<bb 8>:
+ 35                                          |  if (j <= 49)
+ 36                                          |    goto <bb 7>;
+ 37                                          |  else
+ 38                                          |    goto <bb 9>;
+ 39                                          |
+ 40                                          |<bb 9>:
+ 41                                          |  i = i + 1;
+ 42                                          |
+ 43                                          |<bb 10>:                                    
+ 44                                          |  if (i <= 24)                              
+ 45                                          |    goto <bb 6>;                            
+ 46                                          |  else                                      
+ 47                                          |    goto <bb 11>;                           
+ 48                                          |                                            
+ 49                                          |<bb 11>:                                    
+ 50                                          |  return;                                   
+ 51                                          |                                            
+ 52                                          |}                 
+ 
+ 
+ 
+Solutions
+---------
+
+        1 -  Basic blocks 2,  3 and 4 correspond to the  while-loop.
+
+          -  A while loop is  nothing but  a  set  of basic  blocks  with conditional  control            
+             transfer, the only  notable difference being a jump to  a block that
+             has been previously executed (i.e. a backward branch).
+
+        2  - A  for-loop  is only a  while-loop, with  the  initializer separated out  into an  initial basic  block,
+             the  body of  the loop subsequently, the  increment part at the  end of the loop  body, and              
+             the conditional jump back to the start of the loop.

@@ -1,0 +1,25 @@
+
+There is only one dependence in the loop (i.e iteration 9 depends on iteration 8). 
+Hence separating out iteration 9 from the loop will make the loop fully parallel. 
+Dependent iteration can be found out by getting solutions of LDE 
+11x-12y=3 in [0,100] range.
+
+
+int main()
+{
+	int A[150],B[150],i;
+
+
+	for(i=0;i<=100;i++) // loop is parallel now
+	{
+		if(i==9) continue; //skip this iteration
+		A[11*i] = A[12*i+3] * B[i];	
+	}
+	
+	//Execute the skipped iteration 	
+	A[11*9] = A[12*8+3]+B[9];
+	return 0;
+}
+
+
+

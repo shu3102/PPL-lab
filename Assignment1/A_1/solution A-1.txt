@@ -1,0 +1,80 @@
+----------------------------------------------
+A-1 Declarations, Expressions, and Assignments
+----------------------------------------------
+
+  1 int Z;                              |
+  2                                     |
+  3 void main()                         |main ()
+  4 {                                   |{                                      
+  5     int a, b, c;                    |  int D.1713;                          
+  6     int p = 6;                      |  int Z.0;                             
+  7     int q;                          |  int Z.1;                             
+  8     double r;                       |  int a;                               
+  9                                     |  int b;                               
+ 10                                     |  int c;                               
+ 11                                     |  int p;                               
+ 12                                     |  int q;                               
+ 13                                     |  double r;                            
+ 14                                     |                                       
+ 15                                     |  p = 6;                               
+ 16                                     |  
+ 17     a = 10;                         |  a = 10;                              
+ 18                                     |  
+ 19     b = 20;                         |  b = 20;                              
+ 20                                     |                                       
+ 21     c = a * b + 25;                 |  D.1713 = a * b;                      
+ 22                                     |  c = D.1713 + 25;                     
+ 23                                     |                                       
+ 24     p = 6;                          |  p = 6;                               
+ 25                                     |                                       
+ 26     q = Z;                          |  q = Z;                               
+ 27                                     |  
+ 28     r = 34.5;                       |  r = 3.45e+1;                         
+ 29                                     |  
+ 30     Z = r;                          |  Z = (int) r;                               
+ 31                                     |  
+ 32     Z = Z + 1;                      |  Z.0 = Z;                             
+ 33                                     |  Z.1 = Z.0 + 1;                       
+ 34                                     |  Z = Z.1;                             
+ 35 }                                   |}               
+ 
+ 
+Solutions
+---------
+ 
+        1 -  Each  declaration is  displayed on  its own  line as  an independent local variable  declaration. 
+          -  Initializers are broken  up into simple declarations at the  top,
+             while  an assignment statement  is broken in  the body of the procedure.
+          -  There is no  declaration for global  variables; they are used directly.  
+            
+            
+
+        2 - A GIMPLE  statement can have  at most one operation.  
+          - Any expression containing  more than  one  operation is  broken  up by  introducing
+            temporaries. 
+            
+            Rule:-
+                It  is  easy  to   convert  C  expressions  to  GIMPLE
+            statements by considering abstract syntax trees, where each non-leaf
+            node  must  correspond  to  either a  local  or  temporary  variable
+            storage.
+
+        3  - Floats/doubles  are  displayed  in   scientific  notation that is (e to power) . 
+           - Any implicit assignments to integers are  converted to explicit casts in
+            GIMPLE.
+
+        4   Reading/writing  from/to global  variables  requires  a memory  load or  store operation.
+          - As  GIMPLE  statements can  have  at most  one operation, the only type of involving statementsglobals 
+             are of the  form "GLOBAL  = LOCAL" or  "LOCAL =  GLOBAL". 
+           
+          - This is  because while local variables  of a  procedure can  reside entirely  in registers,
+             every read/write  to global variables  must refer to main  memory as          
+            they can be accessed by  other entities (threads, I/O devices, etc).
+           
+          - Hence,  any operation  on global  variables (such  as the  increment  shown  in this  example) 
+            has  to go  through  an  indirection of  a temporary version of the global 
+             inside registers (as this temporary value is  not visible to  I/O devices, etc). 
+
+            
+             Global  temporaries are named similar to the global variable but with a numeric suffix.
+            

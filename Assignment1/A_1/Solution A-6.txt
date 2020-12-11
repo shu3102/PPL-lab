@@ -1,0 +1,28 @@
+--------------------------
+A-6 GIMPLE to C conversion
+---------------------------
+
+There may be more than one solution, but this is the one we used to generate the
+GIMPLE:
+
+-------------------------------------
+#include <stdio.h>
+
+void main()
+{
+    int i, j;
+    for(i = 2; i <= 100; i++) {
+        for(j = 2; j < i; j++) {
+            if(i % j == 0)
+                break;
+        }
+        if(i == j) {
+            printf("%d \n", i);
+        }
+   }            
+}
+-------------------------------------
+
+
+The output is a list of prime numbers up to 100.
+

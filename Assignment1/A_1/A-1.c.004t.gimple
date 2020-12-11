@@ -1,0 +1,29 @@
+main ()
+{
+  int D.1842;
+  int Z.0;
+  int Z.1;
+  int Z.2;
+  int a;
+  int b;
+  int c;
+  int p;
+  int q;
+  double r;
+
+  p = 6;
+  a = 10;
+  b = 20;
+  D.1842 = a * b;
+  c = D.1842 + 25;
+  p = 6;
+  q = Z;
+  r = 3.45e+1;
+  Z.0 = (int) r;
+  Z = Z.0;
+  Z.1 = Z;
+  Z.2 = Z.1 + 1;
+  Z = Z.2;
+}
+
+

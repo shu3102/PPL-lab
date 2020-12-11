@@ -1,0 +1,21 @@
+
+Breaking true dependence by code replication.
+
+int main()
+{
+	int A[100],B[100],C[100];
+	int i,N=90;
+
+	for(i=1;i<N;i++) /* paralleized loop */
+	{
+		A[i]=B[i]*B[i];
+	
+		if(i==1)
+			C[i] = A[i] * A[i-1];
+		else
+			C[i]= A[i] *(B[i-1]*B[i-1]);
+	}			
+}
+
+
+

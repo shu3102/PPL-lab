@@ -1,0 +1,62 @@
+case 1
+
+	1(a): No dependence exists.
+
+	1(b): Parallelization is done by gcc-4.7.2 and can be verified
+	      by looking at parallelization dump.
+	      
+	     ______________________________________________
+	      D.1896_6 = __builtin_omp_get_num_threads ();
+  	      D.1897_7 = (<unnamed-unsigned:32>) D.1896_6;
+ 	      D.1898_8 = __builtin_omp_get_thread_num ();
+      	      D.1899_9 = (<unnamed-unsigned:32>) D.1898_8;
+	     __________________________________________________
+
+	      Similarly Vectorization is done by gcc-4.7.2, and can be
+	      verified by looking at vectorization dumps.
+
+	  ___________________________________________________________________
+	      # vect_pb.5_6 = PHI <vect_pb.5_13(4), vect_pb.8_10(2)>
+ 	      # vect_pa.10_16 = PHI <vect_pa.10_17(4), vect_pa.13_15(2)>
+	      vect_var_.9_14 = MEM[(int[5000000] *)vect_pb.5_6];
+	      vect_pb.5_13 = vect_pb.5_6 + 16;
+	      vect_pa.10_17 = vect_pa.10_16 + 16;
+	   __________________________________________________________
+	_________________________________________________________________
+
+	 2  : Execution time may differ for different machines but
+	      they are expected to be as follows.
+	      ET(upuv) > ET(v) and ET(upuv) > ET(p)
+	
+	      where ET(upuv)  is execution time of unparallelized
+	      and unvectorized code, ET(p)  is execution time of 
+	      parallelized  code and  ET(v) is  execution time of 
+	      vectorized code.
+
+--------------------------------------------------------------------------------
+
+Case 2
+
+	1(a): In case of array 'a' write precedes read option,
+	      Array reference    :   a				
+	      Type of dependence :   RAW (loop carried)		
+	      Source  		 :   S1	
+	      Sink		 :   S2	
+	     __________________________________________
+	      Array reference    :   b				
+	      Type of dependence :   RAW (loop carried)		
+	      Source  		 :   S2	
+	      Sink		 :   S1	
+
+	1(b): Program is  neither  vectorizable nor parallelizable
+	      this can easily be verified by looking  at the  dumps
+
+
+	 2  : Since gcc-4.7.2 can not parallelize or vectorize the code,
+	      therefore ET(upuv) ET(v) and ET(p) are almost equal
+
+	      where ET(upuv)  is execution time of unparallelized
+	      and unvectorized code, ET(p)  is execution time of 
+	      parallelized  code and  ET(v) is  execution time of 
+	      vectorized code.
+

@@ -1,0 +1,30 @@
+
+7b) After fusing the loops, semantics are destroyed.
+
+7c) Fusing and peeling the first two iterations of Loop-1 
+    would make the fused loop preserve 
+    semantics and also will make it fully parallel.
+
+
+int main()
+{	
+	int A[10000],B[10000];
+	int n=9000,i;
+
+	A[0]=A[0]+B[3];
+	A[1]=A[1]+B[4];
+	
+	for(i=0;i<=(n-2);i++)
+	{
+		A[i+2] = A[i+2] + B[i+5];
+		A[i+2] = A[i+2] + B[i];
+	}
+
+	A[n+1] = A[n+1] + B[n-1];
+	A[n+2] = A[n+2] + B[n];
+	
+	return 0;
+}
+
+
+
